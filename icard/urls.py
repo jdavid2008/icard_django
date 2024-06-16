@@ -17,12 +17,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# David. Importación para añadir las rutas estáticas de las imágenes
+from django.conf import settings
+from django.conf.urls.static import static
+# -----------------------------------------------------------------
+
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from users.api.router import router_user
+from categories.api.router import router_category
+from products.api.router import router_product
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -47,5 +54,11 @@ urlpatterns = [
     
     path('api/', include(router_user.urls)), # ModelView
     path('api/', include('users.api.router')), # APiView
+    path('api/', include(router_category.urls)), # ModelView
+    path('api/', include(router_product.urls)), # ModelView
 
 ]
+
+# David. Añadimos las rutas estáticas de las imágenes
+urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT);
+
